@@ -1,0 +1,123 @@
+hdfs dfs -mkdir -p 05Apr2022/wordcount/dataset
+
+hdfs dfs -copyFromLocal 05Apr2022/wordcountDataset.txt 05Apr2022/wordcount/dataset/wordcountDataset.txt
+
+
+
+
+yarn jar hadoop-mapreduce-examples-3.0.0.jar wordcount 05Apr2022/wordcount/dataset/wordcountDataset.txt 05Apr2022/wordcount/output
+
+
+
+
+mysql -u ramuvelugodutigeranalytic -pramuvelugodutigeranalyticncx5v -h sqoopdb.slbdh.cloudlabs.com
+
+
+
+
+
+
+
+create table Employee5Apr2022
+    -> (eid int,
+    -> ename text,
+    -> esal int,
+    -> ecity text);
+
+insert into Employee5Apr2022 values(2,'Jyogi',99999,'sslm');
+
+insert into Employee5Apr2022 values(3,'chaitu',45254,'kurnool');
+
+insert into Employee5Apr2022 values(1,'chandu',65470,'ndk');
+
+insert into Employee5Apr2022 values(4,'Ramu',84520,'blore');
+
+insert into Employee5Apr2022 values(5,'sai',38570,'hyd');
+
+select * from Employee5Apr2022;
+
+
+sqoop list-databases --connect jdbc:mysql://sqoopdb.slbdh.cloudlabs.com --username ramuvelugodutigeranalytic --password ramuvelugodutigeranalyticncx5v
+
+
+sqoop eval --connect jdbc:mysql://sqoopdb.slbdh.cloudlabs.com/ramuvelugodutigeranalytic --username ramuvelugodutigeranalytic --password ramuvelugodutigeranalyticncx5v --query "select * from Employee5Apr2022"
+  
+
+Import
+
+sqoop import --connect jdbc:mysql://sqoopdb.slbdh.cloudlabs.com/ramuvelugodutigeranalytic --username ramuvelugodutigeranalytic --password ramuvelugodutigeranalyticncx5v --table Employee5Apr2022 --target-dir /user/ramuvelugodutigeranalytic/05Apr2022/sqoop/output1 -m 1
+
+--columns shuffle
+
+
+sqoop import --connect jdbc:mysql://sqoopdb.slbdh.cloudlabs.com/ramuvelugodutigeranalytic --username ramuvelugodutigeranalytic --password ramuvelugodutigeranalyticncx5v --table Employee5Apr2022 --target-dir /user/ramuvelugodutigeranalytic/05Apr2022/sqoop/output2 --columns "eid,ename,esal,ecity" -m 1
+
+sqoop codegen --connect jdbc:mysql://sqoopdb.slbdh.cloudlabs.com/ramuvelugodutigeranalytic --username ramuvelugodutigeranalytic --password ramuvelugodutigeranalyticncx5v --table Employee5Apr2022 --bindir transfercode05042022 
+
+
+
+
+
+
+sqoop list-databases --connect jdbc:mysql://sqoopdb.slbdh.cloudlabs.com --username ramuvelugodutigeranalytic --password ramuvelugodutigeranalyticncx5v
+
+sqoop list-databases --connect jdbc:mysql://sqoopdb.slbdh.cloudlabs.com --username ramuvelugodutigeranalytic --password ramuvelugodutigeranalyticncx5v
+
+sqoop list-databases --connect jdbc:mysql://sqoopdb.slbdh.cloudlabs.com --username ramuvelugodutigeranalytic --password ramuvelugodutigeranalyticncx5v
+
+
+
+Export:
+
+select * from walmarttransactions;
+
+sqoop export --connect jdbc:mysql://sqoopdb.slbdh.cloudlabs.com/ramuvelugodutigeranalytic --username ramuvelugodutigeranalytic --password ramuvelugodutigeranalyticncx5v --table walmarttransactions --export-dir /user/ramuvelugodutigeranalytic/tigeranalytics/smallDataset --input-fields-terminated-by ',' --columns "txnid,txndate,custid,amount,category,subcategory,city,state,txntype"
+
+
+Category:
+
+
+sqoop import --connect jdbc:mysql://sqoopdb.slbdh.cloudlabs.com/ramuvelugodutigeranalytic --username ramuvelugodutigeranalytic --password ramuvelugodutigeranalyticncx5v --table walmarttransactions --target-dir /user/ramuvelugodutigeranalytic/05Apr2022/sqoop/txnEF --where "category = 'Exercise & Fitness' " --columns "txnid,txndate,custid,amount,category,subcategory,city,state,txntype" -m 1
+
+
+query: same category
+
+
+sqoop import --connect jdbc:mysql://sqoopdb.slbdh.cloudlabs.com/ramuvelugodutigeranalytic --username ramuvelugodutigeranalytic --password ramuvelugodutigeranalyticncx5v --target-dir /user/ramuvelugodutigeranalytic/05Apr2022/sqoop/txnEF2 --query "select * from walmarttransactions where category = 'Exercise & Fitness' and \$CONDITIONS" -m 1
+
+
+Total no. of transactions: cash And credit
+
+sqoop eval --connect jdbc:mysql://sqoopdb.slbdh.cloudlabs.com/ramuvelugodutigeranalytic --username ramuvelugodutigeranalytic --password ramuvelugodutigeranalyticncx5v --query "select txntype,count(*) as numberoftxn from walmarttransactions group by txntype"
+
+
+Total Revenue:
+
+
+sqoop import --connect jdbc:mysql://sqoopdb.slbdh.cloudlabs.com/ramuvelugodutigeranalytic --username ramuvelugodutigeranalytic --password ramuvelugodutigeranalyticncx5v --target-dir /user/ramuvelugodutigeranalytic/05Apr2022/sqoop/revenue --query "select category,sum(amount) as revenue from walmarttransactions where \$CONDITIONS group by category" -m 1
+
+
+
+Import subset of Data:
+e.g. I want to import those records whose salary is greater than equal to 50000
+
+select * from emp where esal >= 50000;
+
+sqoop import --connect jdbc:mysql://sqoopdb.slbdh.cloudlabs.com/ramuvelugodutigeranalytic --username ramuvelugodutigeranalytic --password ramuvelugodutigeranalyticncx5v --table Employee5Apr2022 --target-dir /user/ramuvelugodutigeranalytic/05Apr2022/sqoop/salgt50000 --where "esal >= 50000" --columns "eid,ename,esal,ecity" -m 1
+
+
+ Import Data on the basis of Sql Query
+
+e.g. I want to import those records whose salary is greater than equal to 50000
+
+sqoop import --connect jdbc:mysql://sqoopdb.slbdh.cloudlabs.com/ramuvelugodutigeranalytic --username ramuvelugodutigeranalytic --password ramuvelugodutigeranalyticncx5v --target-dir /user/ramuvelugodutigeranalytic/05Apr2022/sqoop/salgt50000_FromQuery --query "select * from Employee5Apr2022 where esal >= 50000 and \$CONDITIONS" -m 1
+
+sqoop import --connect jdbc:mysql://sqoopdb.slbdh.cloudlabs.com/ramuvelugodutigeranalytic --username ramuvelugodutigeranalytic --password ramuvelugodutigeranalyticncx5v --target-dir /user/ramuvelugodutigeranalytic/05Apr2022/sqoop/salgt50000_FromQuery -- query "select * from Employee5Apr2022" where esal >= 50000 and \$CONDITIONS" -m 1
+
+
+
+sqoop import --connect jdbc:mysql://sqoopdb.slbdh.cloudlabs.com/ramuvelugodutigeranalytic --username ramuvelugodutigeranalytic --password ramuvelugodutigeranalyticncx5v --table Employee5Apr2022 --target-dir /user/ramuvelugodutigeranalytic/05Apr2022/sqoop/output4 -m 1 --fields-terminated-by '\t'
+
+
+
+sqoop import --connect jdbc:mysql://sqoopdb.slbdh.cloudlabs.com/ramuvelugodutigeranalytic --username ramuvelugodutigeranalytic --password ramuvelugodutigeranalyticncx5v --table Employee5Apr2022 --target-dir /user/ramuvelugodutigeranalytic/05Apr2022/sqoop/output2 --incremental append --check-column eid --last-value 3 --columns "eid,ename,esal,ecity" -m 1

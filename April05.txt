@@ -1,0 +1,63 @@
+
+hdfs dfs -mkdir -p 05april2022/wordcount/dataset
+
+hdfs dfs -copyFromLocal wordcountDataset.txt 05april2022/wordcount/dataset/wordcountDataset.txt
+
+hdfs dfs -copyFromLocal wordcountDataset.txt 05April2022/wordcount/dataset/wordcountDataset.txt
+
+
+yarn jar hadoop-mapreduce-examples-3.0.0.jar wordcount 05april2022/wordcount/dataset/wordcountDataset.txt 05april2022/wordcount/output
+
+yarn jar hadoop-mapreduce-examples-3.0.0.jar wordcount 05April2022/wordcount/dataset/wordcountDataset.txt 05April2022/wordcount/output
+
+
+
+
+
+mysql -u ramuvelugodutigeranalytic -pramuvelugodutigeranalyticncx5v -h sqoopdb.slbdh.cloudlabs.com
+mysql -u ramuvelugodutigeranalytic -pramuvelugodutigeranalyticncx5v -h sqoopdb.slbdh.cloudlabs.com
+
+
+use ramuvelugodutigeranalytic
+
+create table employee5apr2022
+
+(eid int,
+    -> ename text,
+    -> esal int,
+    -> ecity text);
+
+select * from employee5apr2022;
+
+insert into employee5apr2022 values(1,'ramu',24564,'sslm');
+
+insert into employee5apr2022 values(2,'jyogi',99999,'kurnool');
+
+insert into employee5apr2022 values(3,'sai',246124,'vjy');
+
+select * from employee5apr2022;
+
+
+sqoop list-databases --connect jdbc:mysql://sqoopdb.slbdh.cloudlabs.com --username ramuvelugodutigeranalytic --password ramuvelugodutigeranalyticncx5v
+
+
+
+
+
+
+sqoop eval --connect jdbc:mysql://sqoopdb.slbdh.cloudlabs.com/ramuvelugodutigeranalytic --username ramuvelugodutigeranalytic --password ramuvelugodutigeranalyticncx5v --query "select * from employee5Apr2022"
+
+
+sqoop import --connect jdbc:mysql://sqoopdb.slbdh.cloudlabs.com/ramuvelugodutigeranalytic --username ramuvelugodutigeranalytic --password ramuvelugodutigeranalyticncx5v --table employee5Apr2022 --target-dir /user/ramuvelugodutigeranalytic/05April2022/sqoop/output1
+
+
+
+sqoop import --connect jdbc:mysql://sqoopdb.slbdh.cloudlabs.com/ramuvelugodutigeranalytic --username ramuvelugodutigeranalytic --password ramuvelugodutigeranalyticncx5v --table employee5Apr2022 --target-dir /user/ramuvelugodutigeranalytic/05April2022/sqoop/output2 --columns "eid,ename,esal,ecity" -m 1
+
+sqoop codegen --connect jdbc:mysql://sqoopdb.slbdh.cloudlabs.com/ramuvelugodutigeranalytic --username ramuvelugodutigeranalytic --password ramuvelugodutigeranalyticncx5v --table employee5Apr2022 --bindir transfercode05042022
+
+
+
+
+
+

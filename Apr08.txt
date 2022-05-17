@@ -1,0 +1,11 @@
+put 'sqoopdemo1',1,'emp1:esal','25000'
+
+put 'sqoopdemo1',1,'emp1:ename','Srikanth'
+
+
+put 'sqoopdemo1',2,'emp1:ename','Sai'
+
+put 'sqoopdemo1',2,'emp1:esal','15000'
+
+sqoop import --connect jdbc:mysql://sqoopdb.slbdh.cloudlabs.com/ramuvelugodutigeranalytic --username ramuvelugodutigeranalytic --password ramuvelugodutigeranalyticncx5v --table employee1 --hbase-table sqoopdemo1 --column-family emp1 --hbase-row-key ename -m 1
+
